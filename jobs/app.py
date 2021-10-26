@@ -1,7 +1,13 @@
 from flask import Flask
-from flask import render_template
+from flask import render_template, g
+import sqlite3
+
+PATH = "db/jobs.sqlite"
 
 app = Flask(__name__)
+
+def open_connection():
+    getattr(g, '_connection')
 
 @app.route("/")
 @app.route("/jobs")
