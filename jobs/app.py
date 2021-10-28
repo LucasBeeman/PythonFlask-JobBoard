@@ -1,4 +1,5 @@
-from sqlite3.dbapi2 import connect
+from os import close
+from sqlite3.dbapi2 import Connection, connect
 from flask import Flask
 from flask import render_template, g
 import sqlite3
@@ -23,7 +24,14 @@ def execute_sql(sql, values = (), commit = False, single = False):
         results = cursor.fetchone() if single else cursor.fetchall()
         cursor.close()
     return results
-    
+
+@app.teardown_appcontext
+def close_connection(exception):
+    getattr(g, '_connection', None)
+    if open_connection == None:
+        close()
+    return open_connection()
+
 
 @app.route("/")
 @app.route("/jobs")
